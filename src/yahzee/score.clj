@@ -1,4 +1,4 @@
-(ns yahzee.core)
+(ns yahzee.score)
 
 (defn count-dice [dice n]
   "Count the number of dice showing n"

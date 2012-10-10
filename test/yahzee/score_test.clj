@@ -1,6 +1,6 @@
-(ns yahzee.core-test
+(ns yahzee.score-test
   (:use clojure.test
-        yahzee.core))
+        yahzee.score))
 
 (deftest test-sum-only-ones
   (is (= 5 (ones [1 1 1 1 1])))
