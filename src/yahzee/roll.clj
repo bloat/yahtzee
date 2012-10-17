@@ -7,4 +7,5 @@
   (repeatedly 5 roll))
 
 (defn keep-and-roll [dice & indices]
-  (concat (map (vec dice) indices) (repeatedly (- 5 (count indices)) roll)))
+  (concat (map (vec dice) indices) 
+          (repeatedly (- 5 (count indices)) roll)))
