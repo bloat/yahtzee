@@ -2,11 +2,25 @@
 
 (def top-section [:ones :twos :threes :fours :fives :sixes])
 
+(defn yahzee? [dice]
+  (apply = dice))
+
 (defn yahzee-bonus [card dice] 
-  (if (and (:yahzee card)
-           (apply = dice))
+  (if (and (:yahzee card) 
+           (yahzee? dice))
     (update-in card [:yahzee-bonus] (fn [yb] (if (nil? yb) 100 (+ 100 yb))))
     card))
+
+(defn if-not-scored [kw card score]
+  (if (kw card)
+    card
+    (assoc card kw score)))
+
+(defn must-score-top?
+  "Second and subsequent yahzees must go in the top section if possible."
+  [dice card]
+  (and (yahzee? dice)
+       (not-scored? ([nil :ones :twos :threes :fours :fives :sixes] (first dice)) card)))
 
 (defn bonus [card dice]
   (yahzee-bonus 
@@ -18,11 +32,6 @@
 (defn count-dice [dice n]
   "Count the number of dice showing n"
   (count (filter (partial = n) dice)))
-
-(defn if-not-scored [kw card score]
-  (if (kw card)
-    card
-    (assoc card kw score)))
 
 (defn not-scored? [kw card]
   (not (kw card)))
@@ -69,12 +78,14 @@
 (defn chance
   "Sum all dice"
   [dice card]
-  (if-not-scored :chance card (apply + dice)))
+  (if (must-score-top? dice card)
+    card
+    (if-not-scored :chance card (apply + dice))))
 
 (defn yahzee
   "Five of a kind"
   [dice card]
-  (if-not-scored :yahzee card (if (apply = dice) 50 0)))
+  (if-not-scored :yahzee card (if (yahzee? dice) 50 0)))
 
 (defn value-counts
   "Returns counts of the number of times each number appears"
@@ -91,48 +102,61 @@
 (defn three-of-a-kind
   "Sum all dice provided there are three of one number"
   [dice card]
-  (if-not-scored :three-of-a-kind card (n-of-a-kind dice 3)))
+  (if (must-score-top? dice card)
+    card
+    (if-not-scored :three-of-a-kind card (n-of-a-kind dice 3))))
 
 (defn four-of-a-kind
   "Sum all dice provided there are three of one number"
   [dice card]
-  (if-not-scored :four-of-a-kind card (n-of-a-kind dice 4)))
+  (if (must-score-top? dice card)
+    card
+    (if-not-scored :four-of-a-kind card (n-of-a-kind dice 4))))
 
 (defn full-house
  "Three of one and two of another"
  [dice card]
- (if-not-scored :full-house 
-                card
-                (if (= #{2 3} (set (value-counts dice)))
-                  25 
-                  0)))
+ (if (must-score-top? dice card)
+   card
+   (if-not-scored :full-house 
+                  card
+                  (if (or (yahzee? dice) 
+                          (= #{2 3} (set (value-counts dice))))
+                    25 
+                    0))))
 
 (defn low-straight
   "Four consecutive numbers"
   [dice card]
-  (let [sorted (sort (set dice))]
-    (if-not-scored :low-straight  
-                   card
-                   (if (or (= sorted [1 2 3 4])
-                           (= sorted [2 3 4 5])
-                           (= sorted [3 4 5 6])
-                           (= sorted [1 2 3 4 5])
-                           (= sorted [2 3 4 5 6])
-                           (= sorted [1 3 4 5 6])
-                           (= sorted [1 2 3 4 6]))
-                     30
-                     0))))
+  (if (must-score-top? dice card)
+    card
+    (let [sorted (sort (set dice))]
+      (if-not-scored :low-straight  
+                     card
+                     (if (or (= sorted [1 2 3 4])
+                             (= sorted [2 3 4 5])
+                             (= sorted [3 4 5 6])
+                             (= sorted [1 2 3 4 5])
+                             (= sorted [2 3 4 5 6])
+                             (= sorted [1 3 4 5 6])
+                             (= sorted [1 2 3 4 6])
+                             (yahzee? dice))
+                       30
+                       0)))))
 
 (defn high-straight
   "Five consecutive numbers"
   [dice card]
   (let [sorted (sort (set dice))]
-    (if-not-scored :high-straight 
-                   card
-                   (if (or (= sorted [1 2 3 4 5])
-                           (= sorted [2 3 4 5 6]))
-                     40
-                     0))))
+    (if (must-score-top? dice card)
+      card
+      (if-not-scored :high-straight 
+                     card
+                     (if (or (= sorted [1 2 3 4 5])
+                             (= sorted [2 3 4 5 6])
+                             (yahzee? dice))
+                       40
+                       0)))))
 
 (def score-fns 
   {:ones ones :twos twos :threes threes :fours fours :fives fives :sixes sixes

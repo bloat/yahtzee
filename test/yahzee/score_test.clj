@@ -67,7 +67,10 @@
   (is (= {:chance 15} (chance [1 2 3 5 4] {})))
   (is (= {:chance 6} (chance [1 1 1 1 2] {})))
   (is (= {:chance 28} (chance [6 6 6 5 5] {})))
-  (is (= {:chance 28} (chance [6 6 3 3 5] {:chance 28}))))
+  (is (= {:chance 28} (chance [6 6 3 3 5] {:chance 28})))
+  (is (= {:yahzee 50} (chance [6 6 6 6 6] {:yahzee 50})))
+  (is (= {:yahzee 50 :sixes 18 :chance 30} 
+         (chance [6 6 6 6 6] {:yahzee 50 :sixes 18}))))
 
 (deftest test-all-dice-equal
   (is (= {:yahzee 0} (yahzee [1 2 3 4 5] {})))
@@ -82,7 +85,8 @@
   (is (= {:three-of-a-kind 16} (three-of-a-kind [4 4 4 2 2] {})))
   (is (= {:three-of-a-kind 12} (three-of-a-kind [2 3 1 3 3] {})))
   (is (= {:three-of-a-kind 9} (three-of-a-kind [1 2 2 2 2] {})))
-  (is (= {:three-of-a-kind 9} (three-of-a-kind [1 2 6 2 2] {:three-of-a-kind 9}))))
+  (is (= {:three-of-a-kind 9} (three-of-a-kind [1 2 6 2 2] {:three-of-a-kind 9})))
+  (is (= {:yahzee 50} (three-of-a-kind [1 1 1 1 1] {:yahzee 50}))))
 
 (deftest test-four-of-a-kind
   (is (= {:four-of-a-kind 0} (four-of-a-kind [1 2 3 4 5] {})))
@@ -90,14 +94,19 @@
   (is (= {:four-of-a-kind 0} (four-of-a-kind [4 4 4 2 2] {})))
   (is (= {:four-of-a-kind 14} (four-of-a-kind [2 3 3 3 3] {})))
   (is (= {:four-of-a-kind 9} (four-of-a-kind [1 2 2 2 2] {})))
-  (is (= {:four-of-a-kind 9} (four-of-a-kind [6 2 2 2 2] {:four-of-a-kind 9}))))
+  (is (= {:four-of-a-kind 9} (four-of-a-kind [6 2 2 2 2] {:four-of-a-kind 9})))
+  (is (= {:yahzee 50 :ones 3 :four-of-a-kind 5} 
+         (four-of-a-kind [1 1 1 1 1] {:ones 3 :yahzee 50}))))
 
 (deftest test-full-house
   (is (= {:full-house 0} (full-house [1 2 3 4 5] {})))
   (is (= {:full-house 0} (full-house [1 1 2 2 3] {})))
   (is (= {:full-house 25} (full-house [2 2 2 3 3] {})))
   (is (= {:full-house 25} (full-house [3 4 3 4 3] {})))
-  (is (= {:full-house 25} (full-house [3 4 3 2 3] {:full-house 25}))))
+  (is (= {:full-house 25} (full-house [3 4 3 2 3] {:full-house 25})))
+  (is (= {:yahzee 50 :full-house 25 :ones 3} 
+         (full-house [1 1 1 1 1] {:ones 3 :yahzee 50})))
+  (is (= {:yahzee 50} (full-house [1 1 1 1 1] {:yahzee 50}))))
 
 (deftest test-low-straight
   (is (= {:low-straight 0} (low-straight [1 1 1 1 1] {})))
