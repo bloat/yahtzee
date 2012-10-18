@@ -9,7 +9,9 @@
   (is (= {:ones 1 :twos 2 :threes 3 :fours 4 :fives 5 :sixes 6 :bonus 0} 
          (ones [1 2 2 2 2] {:twos 2 :threes 3 :fours 4 :fives 5 :sixes 6})))
   (is (= {:ones 3 :twos 6 :threes 9 :fours 12 :fives 15 :sixes 18 :bonus 35} 
-         (ones [1 1 1 2 2] {:twos 6 :threes 9 :fours 12 :fives 15 :sixes 18}))))
+         (ones [1 1 1 2 2] {:twos 6 :threes 9 :fours 12 :fives 15 :sixes 18})))
+  (is (= {:yahzee 50 :ones 5 :yahzee-bonus 100}
+         (ones [1 1 1 1 1] {:yahzee 50}))))
 
 (deftest test-sum-only-twos
   (is (= {:twos 10} (twos [2 2 2 2 2] {})))
@@ -18,7 +20,9 @@
   (is (= {:ones 1 :twos 8 :threes 3 :fours 4 :fives 5 :sixes 6 :bonus 0} 
          (twos [1 2 2 2 2] {:ones 1 :threes 3 :fours 4 :fives 5 :sixes 6})))
   (is (= {:ones 3 :twos 6 :threes 9 :fours 12 :fives 15 :sixes 18 :bonus 35} 
-         (twos [1 1 2 2 2] {:ones 3 :threes 9 :fours 12 :fives 15 :sixes 18}))))
+         (twos [1 1 2 2 2] {:ones 3 :threes 9 :fours 12 :fives 15 :sixes 18})))
+  (is (= {:twos 4 :yahzee 50} 
+         (twos [2 2 2 2 3] {:yahzee 50 :twos 4}))))
 
 (deftest test-sum-only-threes
   (is (= {:threes 15} (threes [3 3 3 3 3] {})))
@@ -28,7 +32,9 @@
   (is (= {:ones 1 :twos 2 :threes 0 :fours 4 :fives 5 :sixes 6 :bonus 0} 
          (threes [1 2 2 2 2] {:ones 1 :twos 2 :fours 4 :fives 5 :sixes 6})))
   (is (= {:ones 3 :twos 6 :threes 9 :fours 12 :fives 15 :sixes 18 :bonus 35} 
-         (threes [1 3 3 2 3] {:ones 3 :twos 6 :fours 12 :fives 15 :sixes 18}))))
+         (threes [1 3 3 2 3] {:ones 3 :twos 6 :fours 12 :fives 15 :sixes 18})))
+  (is (= {:threes 6 :yahzee 50}
+         (threes [3 3 3 3 3] {:yahzee 50 :threes 6}))))
 
 (deftest test-sum-only-fours
   (is (= {:fours 20} (fours [4 4 4 4 4] {})))

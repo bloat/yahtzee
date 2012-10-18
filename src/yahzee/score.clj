@@ -2,10 +2,18 @@
 
 (def top-section [:ones :twos :threes :fours :fives :sixes])
 
-(defn bonus [card]
-  (if (every? #(contains? card %) top-section)
-    (if-not-scored :bonus card (if (< 62 (reduce + (map card top-section))) 35 0))
+(defn yahzee-bonus [card dice] 
+  (if (and (:yahzee card)
+           (apply = dice))
+    (update-in card [:yahzee-bonus] (fn [yb] (if (nil? yb) 100 (+ 100 yb))))
     card))
+
+(defn bonus [card dice]
+  (yahzee-bonus 
+   (if (every? #(contains? card %) top-section)
+     (if-not-scored :bonus card (if (< 62 (reduce + (map card top-section))) 35 0))
+     card)
+   dice))
 
 (defn count-dice [dice n]
   "Count the number of dice showing n"
@@ -16,11 +24,17 @@
     card
     (assoc card kw score)))
 
+(defn not-scored? [kw card]
+  (not (kw card)))
+
 (defn sum-numbers
   "Sum only the given number, unless that number has already been scored."
   [kw n dice card]
-  (bonus
-   (if-not-scored kw card (* n (count-dice dice n)))))
+  (if (not-scored? kw card)
+    (bonus
+     (assoc card kw (* n (count-dice dice n)))
+     dice)
+    card))
 
 (defn ones 
   "Sum only ones"
@@ -119,8 +133,6 @@
                            (= sorted [2 3 4 5 6]))
                      40
                      0))))
-
-(defn yahzee-bonus [dice card])
 
 (def score-fns 
   {:ones ones :twos twos :threes threes :fours fours :fives fives :sixes sixes

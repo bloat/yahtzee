@@ -32,3 +32,4 @@
     {:card (score-roll (:card game) (:dice game) choice)
      :dice nil
      :rolls-left 3}))
+
