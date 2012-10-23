@@ -1,13 +1,75 @@
-* Yahzee
-
-A Clojure library designed to ... well, that part is up to you.
-
+* Yahtzee
 ** Usage
+This is a small implementation of the Yahtzee rules, implemented in Clojure.
 
-FIXME
+There is a very basic single player UI, which can be used from a CLojure REPL.
+
+Note the the ui is non-functional but the rest of the game (apart from
+rolling the dice) is purely functional.  
+
+Here's an example session:
+
+#+BEGIN_SRC clojure
+user> (use 'yahtzee.ui.repl)
+nil
+
+user> (in-ns 'yahtzee.ui.repl)
+#<Namespace yahtzee.ui.repl>
+
+yahtzee.ui.repl> (new-game)
+{:card {}, :dice nil, :rolls-left 3}
+
+yahtzee.ui.repl> (roll)
+{:card {}, :dice (4 1 2 2 5), :rolls-left 2}
+
+yahtzee.ui.repl> (roll 2 3)
+{:card {}, :dice (2 2 2 1 6), :rolls-left 1}
+
+yahtzee.ui.repl> (roll 0 1 2)
+{:card {}, :dice (2 2 2 6 1), :rolls-left 0}
+
+yahtzee.ui.repl> (score :twos)
+{:card {:twos 6}, :dice nil, :rolls-left 3}
+
+yahtzee.ui.repl> (roll)
+{:card {:twos 6}, :dice (6 5 5 2 6), :rolls-left 2}
+
+yahtzee.ui.repl> (roll 0 1 2 4)
+{:card {:twos 6}, :dice (6 5 5 6 6), :rolls-left 1}
+
+yahtzee.ui.repl> (score :full-house)
+{:card {:full-house 25, :twos 6}, :dice nil, :rolls-left 3}
+#+END_SRC
+
+The list of scoring keywords is:
+ - :ones 
+ - :twos
+ - :threes
+ - :fours 
+ - :fives 
+ - :sixes 
+ - :three-of-a-kind 
+ - :four-of-a-kind 
+ - :full-house 
+ - :low-straight 
+ - :high-straight 
+ - :yahtzee 
+ - :chance 
+
+Bonuses are scored automatically.
 
 ** License
+This file is part of Andrew's Yahtzee.
 
-Copyright © 2012 FIXME
+Andrew's Yahtzee is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-Distributed under the Eclipse Public License, the same as Clojure.
+Andrew's Yahtzee is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Andrew's Yahtzee. If not, see <http://www.gnu.org/licenses/>.

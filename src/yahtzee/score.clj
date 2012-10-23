@@ -16,6 +16,9 @@
     card
     (assoc card kw score)))
 
+(defn not-scored? [kw card]
+  (not (kw card)))
+
 (defn must-score-top?
   "Second and subsequent yahzees must go in the top section if possible."
   [dice card]
@@ -32,9 +35,6 @@
 (defn count-dice [dice n]
   "Count the number of dice showing n"
   (count (filter (partial = n) dice)))
-
-(defn not-scored? [kw card]
-  (not (kw card)))
 
 (defn sum-numbers
   "Sum only the given number, unless that number has already been scored."
