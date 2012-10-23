@@ -1,5 +1,5 @@
-(ns yahzee.ui.repl
-  (:use yahzee.game))
+(ns yahtzee.ui.repl
+  (:use yahtzee.game))
 
 (def this-game (atom (game)))
 

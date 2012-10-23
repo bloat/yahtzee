@@ -1,4 +1,4 @@
-(ns yahzee.roll)
+(ns yahtzee.roll)
 
 (defn roll []
   (+ 1 (rand-int 6)))

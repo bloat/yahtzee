@@ -1,6 +1,6 @@
-(ns yahzee.roll-test
+(ns yahtzee.roll-test
   (:use clojure.test
-        yahzee.roll))
+        yahtzee.roll))
 
 (deftest test-one-dice
   (is (= #{1 2 3 4 5 6} (set (repeatedly 10000 roll)))))

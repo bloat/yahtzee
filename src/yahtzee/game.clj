@@ -1,5 +1,5 @@
-(ns yahzee.game
-  (use [yahzee score roll]))
+(ns yahtzee.game
+  (use [yahtzee score roll]))
 
 (def empty-card 
   {})

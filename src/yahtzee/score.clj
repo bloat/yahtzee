@@ -1,14 +1,14 @@
-(ns yahzee.score)
+(ns yahtzee.score)
 
 (def top-section [:ones :twos :threes :fours :fives :sixes])
 
-(defn yahzee? [dice]
+(defn yahtzee? [dice]
   (apply = dice))
 
-(defn yahzee-bonus [card dice] 
-  (if (and (:yahzee card) 
-           (yahzee? dice))
-    (update-in card [:yahzee-bonus] (fn [yb] (if (nil? yb) 100 (+ 100 yb))))
+(defn yahtzee-bonus [card dice] 
+  (if (and (:yahtzee card) 
+           (yahtzee? dice))
+    (update-in card [:yahtzee-bonus] (fn [yb] (if (nil? yb) 100 (+ 100 yb))))
     card))
 
 (defn if-not-scored [kw card score]
@@ -20,13 +20,13 @@
   (not (kw card)))
 
 (defn must-score-top?
-  "Second and subsequent yahzees must go in the top section if possible."
+  "Second and subsequent yahtzees must go in the top section if possible."
   [dice card]
-  (and (yahzee? dice)
+  (and (yahtzee? dice)
        (not-scored? ([nil :ones :twos :threes :fours :fives :sixes] (first dice)) card)))
 
 (defn bonus [card dice]
-  (yahzee-bonus 
+  (yahtzee-bonus 
    (if (every? #(contains? card %) top-section)
      (if-not-scored :bonus card (if (< 62 (reduce + (map card top-section))) 35 0))
      card)
@@ -82,10 +82,10 @@
     card
     (if-not-scored :chance card (apply + dice))))
 
-(defn yahzee
+(defn yahtzee
   "Five of a kind"
   [dice card]
-  (if-not-scored :yahzee card (if (yahzee? dice) 50 0)))
+  (if-not-scored :yahtzee card (if (yahtzee? dice) 50 0)))
 
 (defn value-counts
   "Returns counts of the number of times each number appears"
@@ -120,7 +120,7 @@
    card
    (if-not-scored :full-house 
                   card
-                  (if (or (yahzee? dice) 
+                  (if (or (yahtzee? dice) 
                           (= #{2 3} (set (value-counts dice))))
                     25 
                     0))))
@@ -140,7 +140,7 @@
                              (= sorted [2 3 4 5 6])
                              (= sorted [1 3 4 5 6])
                              (= sorted [1 2 3 4 6])
-                             (yahzee? dice))
+                             (yahtzee? dice))
                        30
                        0)))))
 
@@ -154,7 +154,7 @@
                      card
                      (if (or (= sorted [1 2 3 4 5])
                              (= sorted [2 3 4 5 6])
-                             (yahzee? dice))
+                             (yahtzee? dice))
                        40
                        0)))))
 
@@ -162,7 +162,7 @@
   {:ones ones :twos twos :threes threes :fours fours :fives fives :sixes sixes
    :bonus bonus :three-of-a-kind three-of-a-kind :four-of-a-kind four-of-a-kind
    :full-house full-house :low-straight low-straight :high-straight high-straight 
-   :yahzee yahzee :chance chance :yahzee-bonus yahzee-bonus})
+   :yahtzee yahtzee :chance chance :yahtzee-bonus yahtzee-bonus})
 
 (defn all-scores [dice card]
   (into {} (map (fn [[key s-fn]] [key (s-fn dice card)]) score-fns)))
